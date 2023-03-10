@@ -129,6 +129,95 @@ var settle_method = "";
 
 function pay_approval()
 {
+
+	// BC : NICEPAY API
+	<?php if($default['de_pg_service'] == 'nice') { ?>	
+
+		var f = document.forderform;
+
+		 // 필드체크
+		if(!payfield_check(f))
+			return false;
+
+		// 금액체크
+		if(!payment_check(f))
+			return false;
+
+		switch(settle_method)
+		{
+			case "계좌이체":
+				f.PayMethod.value   = "BANK";
+				break;
+			case "가상계좌":
+				f.PayMethod.value   = "VBANK";
+				break;
+			case "휴대폰":
+				<?php if($default['de_escrow_use']) { ?>
+				alert("휴대폰은 지원하지 않습니다.");
+				return false;
+				<?php } ?>
+				f.PayMethod.value   = "CELLPHONE";
+				break;
+			case "신용카드":
+				f.PayMethod.value   = "CARD";
+				break;
+			default:
+				f.PayMethod.value   = "무통장";
+				break;
+		}
+
+		f.Amt.value = f.good_mny.value;
+		f.BuyerName.value = f.pp_name.value;
+		f.BuyerTel.value = f.pp_hp.value;
+		f.BuyerEmail.value = f.pp_email.value;
+
+		if(f.PayMethod.value != "무통장"){
+			var data_state = false;
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				data: {
+					Amt : f.Amt.value
+				},
+				url: g5_url+"/shop/nice/ajax.nice.php",
+				cache: false,
+				async: false,
+				success: function(data){
+					if(data.EdiDate != "" && data.EncryptData != ""){
+						f.EdiDate.value = data.EdiDate;
+						f.SignData.value = data.EncryptData;
+						data_state = true;
+					}
+				}
+			});
+			if(!data_state)
+				return false;
+
+			// 주문 정보 임시저장
+			var order_data = $(f).serialize();
+			var save_result = "";
+			$.ajax({
+				type: "POST",
+				data: order_data,
+				url: g5_url+"/shop/ajax.orderdatasave.php",
+				cache: false,
+				async: false,
+				success: function(data) {
+					save_result = data;
+				}
+			});
+
+			if(save_result) {
+				alert(save_result);
+				return false;
+			}
+			
+			nicepayStart();
+		} else {
+			f.submit();
+		}
+	<?php } else { ?>
+
     var f = document.sm_form;
     var pf = document.forderform;
 
@@ -231,6 +320,9 @@ function pay_approval()
     }
 
     f.submit();
+
+	// BC : NICEPAY API
+	<?php } ?>
 }
 
 function forderform_check()

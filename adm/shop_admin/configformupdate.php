@@ -456,6 +456,9 @@ $sql = " update {$g5['config_table']}
                 cf_lg_mert_key          = '{$cf_lg_mert_key}' ";
 sql_query($sql);
 
+// BC : NICEPAY API
+run_event('shop_config_update', $_POST);
+
 if( $warning_msg ){
     alert($warning_msg, "./configform.php");
 } else {

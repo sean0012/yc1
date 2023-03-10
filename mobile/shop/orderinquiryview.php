@@ -337,6 +337,11 @@ if($od['od_pg'] == 'lg') {
                                 $hp_receipt_script = 'showReceiptByTID(\''.$LGD_MID.'\', \''.$LGD_TID.'\', \''.$LGD_HASHDATA.'\');';
                             } else if($od['od_pg'] == 'inicis') {
                                 $hp_receipt_script = 'window.open(\'https://iniweb.inicis.com/DefaultWebApp/mall/cr/cm/mCmReceipt_head.jsp?noTid='.$od['od_tno'].'&noMethod=1\',\'receipt\',\'width=430,height=700\');';
+
+							// BC : NICEPAY API
+							} else if($od['od_pg'] == 'nice') {
+								$hp_receipt_script = 'window.open(\'https://npg.nicepay.co.kr/issue/IssueLoader.do?TID='.$od['od_tno'].'&type=0\',\'receipt\',\'width=430,height=700\');';
+
                             } else {
                                 $hp_receipt_script = 'window.open(\''.G5_BILL_RECEIPT_URL.'mcash_bill&tno='.$od['od_tno'].'&order_no='.$od['od_id'].'&trade_mony='.$od['od_receipt_price'].'\', \'winreceipt\', \'width=500,height=690,scrollbars=yes,resizable=yes\');';
                             }
@@ -356,6 +361,11 @@ if($od['od_pg'] == 'lg') {
                                 $card_receipt_script = 'showReceiptByTID(\''.$LGD_MID.'\', \''.$LGD_TID.'\', \''.$LGD_HASHDATA.'\');';
                             } else if($od['od_pg'] == 'inicis') {
                                 $card_receipt_script = 'window.open(\'https://iniweb.inicis.com/DefaultWebApp/mall/cr/cm/mCmReceipt_head.jsp?noTid='.$od['od_tno'].'&noMethod=1\',\'receipt\',\'width=430,height=700\');';
+
+							// BC : NICEPAY API
+							} else if($od['od_pg'] == 'nice') {
+								$card_receipt_script = 'window.open(\'https://npg.nicepay.co.kr/issue/IssueLoader.do?TID='.$od['od_tno'].'&type=0\',\'receipt\',\'width=430,height=700\');';
+
                             } else {
                                 $card_receipt_script = 'window.open(\''.G5_BILL_RECEIPT_URL.'card_bill&tno='.$od['od_tno'].'&order_no='.$od['od_id'].'&trade_mony='.$od['od_receipt_price'].'\', \'winreceipt\', \'width=470,height=815,scrollbars=yes,resizable=yes\');';
                             }

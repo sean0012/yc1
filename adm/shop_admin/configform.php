@@ -209,6 +209,14 @@ if( function_exists('pg_setting_check') ){
 if(!$default['de_kakaopay_cancelpwd']){
     $default['de_kakaopay_cancelpwd'] = '1111';
 }
+
+// BC : NICEPAY API
+if(!isset($default['de_nice_mid'])) { 
+	sql_query(" ALTER TABLE `{$g5['g5_shop_default_table']}`
+	ADD `de_nice_mid` VARCHAR( 255 ) NOT NULL DEFAULT '',
+	ADD `de_nice_key` VARCHAR( 255 ) NOT NULL DEFAULT '' ", true);
+}//endif;
+
 ?>
 
 <form name="fconfig" action="./configformupdate.php" onsubmit="return fconfig_check(this)" method="post" enctype="MULTIPART/FORM-DATA">
@@ -625,7 +633,7 @@ if(!$default['de_kakaopay_cancelpwd']){
         <tr id="inicis_vbank_url" class="pg_vbank_url">
             <th scope="row">KG이니시스 가상계좌 입금통보 URL</th>
             <td>
-                <?php echo help("KG이니시스 가상계좌 사용시 다음 주소를 <strong><a href=\"https://iniweb.inicis.com/\" target=\"_blank\">KG이니시스 관리자</a> &gt; 거래조회 &gt; 가상계좌 &gt; 입금통보방식선택 &gt; URL 수신 설정</strong>에 넣으셔야 상점에 자동으로 입금 통보됩니다."); ?>
+				<?php echo help("KG이니시스 가상계좌 사용시 다음 주소를 <strong><a href=\"https://iniweb.inicis.com/\" target=\"_blank\">KG이니시스 관리자</a> &gt; 거래내역 &gt; 가상계좌 &gt; 입금통보방식선택 &gt; URL 수신 설정</strong>에 넣으셔야 상점에 자동으로 입금 통보됩니다."); ?>
                 <?php echo G5_SHOP_URL; ?>/settle_inicis_common.php</td>
         </tr>
         <tr>
@@ -758,9 +766,14 @@ if(!$default['de_kakaopay_cancelpwd']){
                     <li class="<?php if($default['de_pg_service'] == 'kcp') echo 'tab-current'; ?>"><a href="#kcp_info_anchor" data-value="kcp" title="NHN KCP 선택하기" >NHN KCP</a></li>
                     <li class="<?php if($default['de_pg_service'] == 'lg') echo 'tab-current'; ?>"><a href="#lg_info_anchor" data-value="lg" title="토스페이먼츠 선택하기">토스페이먼츠</a></li>
                     <li class="<?php if($default['de_pg_service'] == 'inicis') echo 'tab-current'; ?>"><a href="#inicis_info_anchor" data-value="inicis" title="KG이니시스 선택하기">KG이니시스</a></li>
+
+					<!-- BC : NICEPAY API -->
+					<li class="<?php if($default['de_pg_service'] == 'nice') echo 'tab-current'; ?>"><a href="#nice_info_anchor" data-value="nice" title="NICEPAY 선택하기">NICEPAY</a></li>
+
                 </ul>
             </td>
-        </tr>
+        </tr>	
+
         <tr class="pg_info_fld kcp_info_fld" id="kcp_info_anchor">
             <th scope="row">
                 <label for="de_kcp_mid">KCP SITE CODE</label><br>
@@ -919,6 +932,27 @@ if(!$default['de_kakaopay_cancelpwd']){
                 <input type="text" name="de_kakaopay_hashkey" value="<?php echo get_sanitize_input($default['de_kakaopay_hashkey']); ?>" id="de_kakaopay_hashkey" class="frm_input" size="20">
             </td>
         </tr>
+
+		<!-- BC : NICEPAY API -->
+		<tr class="pg_info_fld nice_info_fld" id="nice_info_anchor">
+			<th scope="row">
+				<label for="de_nice_mid">NICEPAY ID</label><br>
+			</th>
+			<td colspan="3">
+				<?php echo help("NICEPAY 가맹점 관리자 로그인 -> 가맹점정보 -> 가맹정정보 -> KEY 관리에 MID 값을 입력합니다."); ?>
+				<input type="text" name="de_nice_mid" value="<?php echo $default['de_nice_mid']; ?>" id="de_nice_mid" class="frm_input code_input">
+			</td>
+		</tr>
+		<tr class="pg_info_fld nice_info_fld">
+			<th scope="row">
+				<label for="de_nice_key">NICEPAY KEY</label><br>
+			</th>
+			<td colspan="3">
+				<?php echo help("NICEPAY 가맹점 관리자 로그인 -> 가맹점정보 -> 가맹정정보 -> KEY 관리에 Key 값을 입력합니다."); ?>
+				<input type="text" name="de_nice_key" value="<?php echo $default['de_nice_key']; ?>" id="de_nice_key" class="frm_input code_input" size="100" maxlength="100">
+			</td>
+		</tr>		
+
         <tr class="naver_info_fld">
             <th scope="row">
                 <label for="de_naverpay_mid">네이버페이 가맹점 아이디</label>
@@ -1602,7 +1636,7 @@ function byte_check(el_cont, el_byte)
                 <input type="password" name="cf_icode_pw" value="<?php echo get_sanitize_input($config['cf_icode_pw']); ?>" class="frm_input" id="cf_icode_pw">
             </td>
         </tr>
-        <tr class="icode_old_version" <?php if(!(isset($userinfo['payment']) && $userinfo['payment'])){ echo 'cf_tr_hide'; } ?>">
+        <tr class="icode_old_version <?php if(!(isset($userinfo['payment']) && $userinfo['payment'])){ echo 'cf_tr_hide'; } ?>">
             <th scope="row">요금제<br>(구버전)</th>
             <td>
                 <input type="hidden" name="cf_icode_server_ip" value="<?php echo get_sanitize_input($config['cf_icode_server_ip']); ?>">

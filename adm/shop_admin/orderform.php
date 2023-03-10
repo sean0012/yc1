@@ -519,6 +519,13 @@ add_javascript(G5_POSTCODE_JS, 0);    //다음 주소 js
                                     $pg_url  = 'https://mms.cnspay.co.kr';
                                     $pg_test = 'KAKAOPAY';
                                     break;
+								
+								// BC : NICEPAY API
+								case 'nice' :
+									$pg_url = 'https://npg.nicepay.co.kr/';
+									$pg_test = 'NICEPAY ';
+									break;
+
                                 default:
                                     $pg_url  = 'http://admin8.kcp.co.kr';
                                     $pg_test = 'KCP';
@@ -843,6 +850,7 @@ add_javascript(G5_POSTCODE_JS, 0);    //다음 주소 js
 
     <div class="btn_confirm01 btn_confirm">
         <input type="submit" value="결제/배송내역 수정" class="btn_submit btn">
+		<a href="./orderpartcancel.php?od_id=<?php echo $od_id; ?>" id="orderpartcancel" class="btn btn_02"><?php echo $od['od_settle_case']; ?> 부분취소</a>
         <?php if($od['od_status'] == '주문' && $od['od_misu'] > 0) { ?>
         <a href="./personalpayform.php?popup=yes&amp;od_id=<?php echo $od_id; ?>" id="personalpay_add" class="btn btn_02">개인결제추가</a>
         <?php } ?>

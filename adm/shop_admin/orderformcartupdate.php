@@ -271,6 +271,22 @@ if (in_array($_POST['ct_status'], $status_cancel)) {
                         $_REQUEST['PartialCancelCode'] = 0;
                         include G5_SHOP_PATH.'/kakaopay/kakaopay_cancel.php';
                         break;
+
+					// BC : NICEPAY API
+					case 'nice' :
+							include_once(G5_SHOP_PATH.'/settle_nice.inc.php');
+							
+							$tid = $od['od_tno'];
+							$mid = $default['de_nice_mid'];
+							$merchantKey = $default['de_nice_key'];
+							$moid = $od['od_id'];
+							$cancelAmt = $od['od_receipt_price'];
+							$cancelMsg = "쇼핑몰 운영자 승인 취소";
+							$partialCancelCode = 0;
+
+							include_once(G5_SHOP_PATH.'/nice/cancel.php');
+						break;
+
                     default:
                         include_once(G5_SHOP_PATH.'/settle_kcp.inc.php');
                         require_once(G5_SHOP_PATH.'/kcp/pp_ax_hub_lib.php');

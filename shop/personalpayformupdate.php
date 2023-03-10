@@ -34,6 +34,12 @@ if ($pp_settle_case == "계좌이체")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             $bank_name  = iconv("cp949", "utf-8", $bank_name);
@@ -56,6 +62,12 @@ else if ($pp_settle_case == "가상계좌")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             $bankname   = iconv("cp949", "utf-8", $bankname);
@@ -78,6 +90,12 @@ else if ($pp_settle_case == "휴대폰")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             break;
@@ -98,6 +116,12 @@ else if ($pp_settle_case == "신용카드")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+		
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             $card_name  = iconv("cp949", "utf-8", $card_name);
@@ -125,6 +149,15 @@ if((int)$pp['pp_price'] !== (int)$pg_price) {
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inipay_cancel.php';
             break;
+		
+		// BC : NICEPAY API
+		case 'nice':
+			$tid = $tno;
+			$cancelAmt = $amount;
+			$cancelMsg = $cancel_msg;
+			include G5_SHOP_PATH.'/nice/cancel.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub_cancel.php';
             break;
@@ -162,6 +195,15 @@ if(!$result) {
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inipay_cancel.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			$tid = $tno;
+			$cancelAmt = $amount;
+			$cancelMsg = $cancel_msg;
+			include G5_SHOP_PATH.'/nice/cancel.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub_cancel.php';
             break;
@@ -199,6 +241,15 @@ if($pp_receipt_price > 0 && $pp['pp_id'] && $pp['od_id']) {
                 break;
             case 'inicis':
             include G5_SHOP_PATH.'/inicis/inipay_cancel.php';
+
+			// BC : NICEPAY API
+			case 'nice':
+				$tid = $tno;
+				$cancelAmt = $amount;
+				$cancelMsg = $cancel_msg;
+				include G5_SHOP_PATH.'/nice/cancel.php';
+				break;
+
             break;
             default:
                 include G5_SHOP_PATH.'/kcp/pp_ax_hub_cancel.php';

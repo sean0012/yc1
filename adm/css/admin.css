@@ -666,6 +666,9 @@ ul.de_pg_tab li.tab-current a{background:#2CC185;color:#fff}
 .kakao_info_fld th{background-color:#FFFCED}
 .naver_info_fld th{background-color:#F3FFF3}
 
+/* BC : NICEPAY API */
+.nice_info_fld th{background-color:#90DBF7}
+
 /* 주문내역 */
 #sodr_list td {text-align:center}
 #sodr_list .td_name {text-align:center !important}

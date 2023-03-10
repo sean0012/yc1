@@ -1523,6 +1523,33 @@ function forderform_check(f)
                 f.gopaymethod.value = "무통장";
                 break;
         }
+
+		// BC : NICEPAY API
+		<?php }  else if($default['de_pg_service'] == 'nice') { ?>		
+		switch(settle_method)
+		{
+			case "계좌이체":
+				f.PayMethod.value   = "BANK";
+				break;
+			case "가상계좌":
+				f.PayMethod.value   = "VBANK";
+				break;
+			case "휴대폰":
+				<?php if($default['de_escrow_use']) { ?>
+				alert("휴대폰은 지원하지 않습니다.");
+				return false;
+				<?php } ?>
+				f.PayMethod.value   = "CELLPHONE";
+				break;
+			case "신용카드":
+				f.PayMethod.value   = "CARD";
+				break;
+			default:
+				f.PayMethod.value   = "무통장";
+				break;
+		}
+
+
         <?php } ?>
 
         // 결제정보설정
@@ -1610,6 +1637,42 @@ function forderform_check(f)
             f.submit();
         }
         <?php } ?>
+
+		// BC : NICEPAY API
+		<?php if($default['de_pg_service'] == 'nice') { ?>		
+		f.Amt.value = f.good_mny.value;
+		f.BuyerName.value = f.od_name.value;
+		f.BuyerTel.value = f.od_hp.value ? f.od_hp.value : f.od_tel.value;
+		f.BuyerEmail.value = f.od_email.value;
+
+		if(f.PayMethod.value != "무통장"){
+			var data_state = false;
+			$.ajax({
+				type: "POST",
+				dataType: "json",
+				data: {
+					Amt : f.Amt.value
+				},
+				url: g5_url+"/shop/nice/ajax.nice.php",
+				cache: false,
+				async: false,
+				success: function(data){
+					if(data.EdiDate != "" && data.EncryptData != ""){
+						f.EdiDate.value = data.EdiDate;
+						f.SignData.value = data.EncryptData;
+						data_state = true;
+					}
+				}
+			});
+			if(!data_state)
+				return false;
+			
+			nicepayStart();
+		} else {
+			f.submit();
+		}
+		<?php } ?>
+
     }
 
 }

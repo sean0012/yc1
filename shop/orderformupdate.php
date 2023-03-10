@@ -327,6 +327,12 @@ else if ($od_settle_case == "계좌이체")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+		
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             $bank_name  = iconv("cp949", "utf-8", $bank_name);
@@ -355,6 +361,12 @@ else if ($od_settle_case == "가상계좌")
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             $od_app_no = $app_no;
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+		
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             $bankname   = iconv("cp949", "utf-8", $bankname);
@@ -379,6 +391,12 @@ else if ($od_settle_case == "휴대폰")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             break;
@@ -403,6 +421,12 @@ else if ($od_settle_case == "신용카드")
         case 'inicis':
             include G5_SHOP_PATH.'/inicis/inistdpay_result.php';
             break;
+
+		// BC : NICEPAY API
+		case 'nice':
+			include G5_SHOP_PATH.'/nice/result.php';
+			break;
+
         default:
             include G5_SHOP_PATH.'/kcp/pp_ax_hub.php';
             $card_name  = iconv("cp949", "utf-8", $card_name);
@@ -492,6 +516,15 @@ if($tno) {
                 $_REQUEST['PartialCancelCode'] = 0;
                 include G5_SHOP_PATH.'/kakaopay/kakaopay_cancel.php';
                 break;
+
+			// BC : NICEPAY API
+			case 'nice':
+				$tid = $tno;
+				$cancelAmt = $amount;
+				$cancelMsg = $cancel_msg;
+				include G5_SHOP_PATH.'/nice/cancel.php';
+				break;
+
             default:
                 include G5_SHOP_PATH.'/kcp/pp_ax_hub_cancel.php';
                 break;
@@ -625,6 +658,15 @@ if(! $result || ! (isset($exists_order['od_id']) && $od_id && $exists_order['od_
                 $_REQUEST['PartialCancelCode'] = 0;
                 include G5_SHOP_PATH.'/kakaopay/kakaopay_cancel.php';
                 break;
+			
+			// BC : NICEPAY API
+			case 'nice':
+				$tid = $tno;
+				$cancelAmt = $amount;
+				$cancelMsg = $cancel_msg;
+				include G5_SHOP_PATH.'/nice/cancel.php';
+				break;
+
             default:
                 include G5_SHOP_PATH.'/kcp/pp_ax_hub_cancel.php';
                 break;
@@ -672,6 +714,15 @@ if(!$result) {
                 $_REQUEST['PartialCancelCode'] = 0;
                 include G5_SHOP_PATH.'/kakaopay/kakaopay_cancel.php';
                 break;
+
+			// BC : NICEPAY API
+			case 'nice':
+				$tid = $tno;
+				$cancelAmt = $amount;
+				$cancelMsg = $cancel_msg;
+				include G5_SHOP_PATH.'/nice/cancel.php';
+				break;
+			
             default:
                 include G5_SHOP_PATH.'/kcp/pp_ax_hub_cancel.php';
                 break;
