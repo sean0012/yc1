@@ -555,6 +555,7 @@ if($is_kakaopay_use) {
             <div id="od_pay_sl">
 				<div class="od_pay_buttons_el">
                 <h3>결제수단</h3>
+                <div id="xpay_qrcode"></div>
                 <?php
                 if (!$default['de_card_point'])
                     echo '<p id="sod_frm_pt_alert"><strong>무통장입금</strong> 이외의 결제 수단으로 결제하시는 경우 포인트를 적립해드리지 않습니다.</p>';
@@ -1644,6 +1645,24 @@ function forderform_check(f)
 		f.BuyerName.value = f.od_name.value;
 		f.BuyerTel.value = f.od_hp.value ? f.od_hp.value : f.od_tel.value;
 		f.BuyerEmail.value = f.od_email.value;
+
+        //axios.post('http://121.140.119.11:4000/api/v1/trade/pamt_init', {
+        axios.post('http://localhost:4000/api/v1/trade/pamt_init', {
+            'amount': parseInt(f.Amt.value),
+            'return_url': 'http://localhost:8888/yc1/shop/orderformupdate.php'
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3YWxsZXQiOiIweFBJWlpBIiwic2VjcmV0X2hhc2giOiI4ZDk2OWVlZjZlY2FkM2MyOWEzYTYyOTI4MGU2ODZjZjBjM2Y1ZDVhODZhZmYzY2ExMjAyMGM5MjNhZGM2YzkyIn0.UkFC9owPBoXqi-LotpXnkBeeT_xw3kwkm0WELR7oINI'
+            },
+        }).then(res => {
+            console.log('then res:',res.data.dynamic_code);
+            new QRCode(document.getElementById('xpay_qrcode'), {
+                text: res.data.dynamic_code,
+                width: 128,
+                height: 128
+            });
+        });
 
 		if(f.PayMethod.value != "무통장"){
 			var data_state = false;

@@ -13,7 +13,8 @@ $MID         = $default['de_nice_mid']; // 상점아이디
 ?>
 
 <!-- 아래 js는 PC 결제창 전용 js입니다.(모바일 결제창 사용시 필요 없음) -->
-<script src="https://web.nicepay.co.kr/v3/webstd/js/nicepay-3.0.js" type="text/javascript"></script>
+<!--<script src="https://web.nicepay.co.kr/v3/webstd/js/nicepay-3.0.js" type="text/javascript"></script>-->
+<?php add_javascript('<script src="'.G5_JS_URL.'/nicepay-3.0.js"></script>', 0); ?>
 <script type="text/javascript">
 //결제창 최초 요청시 실행됩니다.
 function nicepayStart(){
